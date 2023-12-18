@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, Button, Spinner } from "react-bootstrap";
+import { Table, Button, Spinner, Navbar, Container } from "react-bootstrap";
+
+import "./style.css";
+import SideMenu from "../../components/side-menu/side-menu";
+
 import Backspace from "../../assets/backspace.png";
 import Edit from "../../assets/edit.png";
-import "./style.css";
+import Sidebar from '../../assets/sidebar.png';
 
 function Pedidos() {
   type dataOrder = {
@@ -21,13 +25,12 @@ function Pedidos() {
     date: string;
     status: string;
     rastreio: string;
-    idClient:string
+    idClient: string
   };
   type dataArray = [string, dataOrder][];
 
   const [orders, setOrders] = useState<dataArray>([]);
   const [loadOrders, setLoadOrders] = useState<boolean>(true);
-  const [openMenuSide, setOpenManuSide] = useState<boolean>(false);
 
   useEffect(() => {
     async function getOrders() {
@@ -50,24 +53,34 @@ function Pedidos() {
     getOrders();
   }, [loadOrders]);
 
-  async function removeOrder(idClient, idOrder){
-    try{
+  async function removeOrder(idClient, idOrder) {
+    try {
       await axios({
-        method:"delete",
-        url:`http://localhost:3333/orders/delete/${idClient}/${idOrder}`
-      }).then(function (response){
-        if(response.status == 200){
+        method: "delete",
+        url: `http://localhost:3333/orders/delete/${idClient}/${idOrder}`
+      }).then(function (response) {
+        if (response.status == 200) {
           setLoadOrders(true)
         }
       })
-    }catch(err){
+    } catch (err) {
       console.log('Erro na requisição')
     }
   }
 
   return (
     <div>
-      <Button variant="primary">Primary</Button>
+      <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
+        <Container>
+          <Navbar.Brand href="#home">
+            <Button variant="primary" className="bttMenu" onClick={() => {
+              document.getElementById('mySidenav').style.width = "250px";
+            }}><img className="bttMenuSide" src={Sidebar} alt="bttMenuSide"/></Button>
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
+      <SideMenu />
+
       {loadOrders ? (
         <Spinner animation="border" variant="primary" />
       ) : (
@@ -103,8 +116,9 @@ function Pedidos() {
                   <td>{orderData.rastreio}</td>
                   <td>{orderData.status}</td>
                   <td>
-                    <Button variant="danger" onClick={()=>removeOrder(orderData.idClient, orderNumber)}>
+                    <Button variant="danger" onClick={() => removeOrder(orderData.idClient, orderNumber)}>
                       <img className="btt" src={Backspace} alt="deleteOrder" />
+                      
                     </Button>
                     <Button variant="primary">
                       <img className="btt" src={Edit} alt="deleteOrder" />

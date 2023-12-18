@@ -1,11 +1,12 @@
 import {createContext} from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 export const Context = createContext({})
 
 function ContextPedidosProvider({children}){
     return(
-        <Context.Provider value={{myName:'Hugo'}}>
+        <Context.Provider value={{
+        }}>
             {children}
         </Context.Provider>
     )

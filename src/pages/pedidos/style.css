@@ -2,6 +2,14 @@
     width: 20px;
 }
 
+.bttMenu{
+    background-color: #F8F5E4 !important;
+}
+
+.bttMenuSide{
+    width: 25px;
+}
+
 .btn{
     margin:2px
 }
@@ -16,4 +24,11 @@ tbody td, thead th{
     top: 50%;
     left: 50%;
     border-width: 5px !important;
+}
+
+
+
+
+.navbar .container{
+    margin:0;
 }
