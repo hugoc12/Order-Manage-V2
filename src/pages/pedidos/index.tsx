@@ -27,6 +27,7 @@ function Pedidos() {
 
   const [orders, setOrders] = useState<dataArray>([]);
   const [loadOrders, setLoadOrders] = useState<boolean>(true);
+  const [openMenuSide, setOpenManuSide] = useState<boolean>(false);
 
   useEffect(() => {
     async function getOrders() {
@@ -66,6 +67,7 @@ function Pedidos() {
 
   return (
     <div>
+      <Button variant="primary">Primary</Button>
       {loadOrders ? (
         <Spinner animation="border" variant="primary" />
       ) : (
