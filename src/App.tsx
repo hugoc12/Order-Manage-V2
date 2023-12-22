@@ -3,6 +3,7 @@ import Pedidos from './pages/pedidos';
 import Produtos from './pages/produtos';
 import Clients from './pages/clientes';
 import ContextPedidosProvider from './contexts/contextPedidos';
+import ContextClientsProvider from './contexts/contextClients';
 
 const browser = createBrowserRouter([
   {
@@ -12,7 +13,7 @@ const browser = createBrowserRouter([
 
   {
     path:'/clientes',
-    element:<Clients/>
+    element:<ContextClientsProvider><Clients/></ContextClientsProvider>
   },
 
   {

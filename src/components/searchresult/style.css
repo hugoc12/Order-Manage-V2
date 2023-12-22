@@ -1,0 +1,30 @@
+.containerResults{
+    width: 600px;
+    background-color: #10828C;
+    border-radius: 5px;
+    margin: 5px auto;
+    padding: 5px;
+}
+
+.ulClients{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.itemList{
+    height: 30px;
+    background-color: #F8F5E4;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px 8px;
+}
+
+.itemList:hover{
+    cursor: pointer;
+    background-color: #F97300;
+}
+
+.itemList:active{
+    background-color: #ce6000;
+}
