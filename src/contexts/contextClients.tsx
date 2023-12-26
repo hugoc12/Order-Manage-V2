@@ -2,50 +2,49 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from 'prop-types'
 
-export const Context = createContext({})
+type ClientContextType = {
+    namesResult: Array<any>,
+    setNamesResult: React.Dispatch<React.SetStateAction<Array<Array<any>>>>,
+    listNames: Array<any>,
+    setListNames: React.Dispatch<React.SetStateAction<Array<any>>>
+}
+
+export const ContextClient = createContext<ClientContextType | undefined>(undefined)
 
 function ContextClientsProvider({ children }) {
-    const names = [
-        ['Bu5bDx4hEYvZKG8sJqid', 'Hugo de Oliveira Pinho'],
-        ['zzZ3VL83O6GTjYA7KmoY', 'Murilo de Oliveira Pinho'],
-        ['zzZ3VL83O6GTjYA7Ktry', 'Maria de Oliveira Pinho'],
-        ['zzZ3VL83O6GTjYA7Ktry', 'Edvaldo Pinho']
-    ]
 
-    const [listNames, setListNames] = useState([]);
-    const [textTyped, setTextTyped] = useState([]);
+    const [namesResult, setNamesResult] = useState<Array<any>>([]);
+    const [listNames, setListNames] = useState<Array<any>>([]);
+
     useEffect(() => {
-        let regxp = new RegExp(`^${textTyped}`)
-        const namesFilters = names.filter((el)=>regxp.exec(el[1]))
-        setListNames(namesFilters)
-        //Mount Component
-/*         async function getClientsNames() {
+        async function getNames() {
             try {
                 await axios({
-                    method: "get",
-                    url: "",
-                    responseType: "json"
-                }).then((resp) => {
-                    console.log(resp.data)
+                    method: 'get',
+                    url: 'http://localhost:3333/clientsnames',
+                    responseType: 'json',
+                }).then(function (response) {
+                    const data = Object.entries(response.data);
+                    setListNames(data)
                 })
-            } catch (err: any) {
-                return 'ERRO AO BUSCAR OS NOMES!'
+            } catch (err) {
+                console.log(`HOUVE UM ERRO AO CARREGAR OS NOMES: ${err}`)
             }
-        } */
-    }, [textTyped])
+        }
+
+        getNames()
+    }, [])
 
     return (
-        <Context.Provider value={{
+        <ContextClient.Provider value={{
+            namesResult,
+            setNamesResult,
+
             listNames,
-            setListNames,
-
-            textTyped,
-            setTextTyped,
-
-            names
+            setListNames
         }}>
             {children}
-        </Context.Provider>
+        </ContextClient.Provider>
     );
 }
 

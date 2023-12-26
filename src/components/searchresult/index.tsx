@@ -1,16 +1,16 @@
-import { useState, useContext } from "react";
-import { Context } from "../../contexts/contextClients";
+import { useContext } from "react";
+import { ContextClient } from "../../contexts/contextClients";
 import './style.css';
 
-function SearchResult(props) {
+function SearchResult() {
 
-    const context = useContext(Context)
+    const context = useContext(ContextClient)
     //console.log(context.listNames)
     return (
         <div className="containerResults">
              <ul className="ulClients">
-                {context.listNames.map((el)=>
-                    <li className="itemList">{el[1]}</li>
+                {context?.namesResult.map((el)=>
+                    <li className="itemList" key={el[0]}>{el[1]}</li>
                 )}
              </ul>
         </div>
