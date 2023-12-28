@@ -74,7 +74,7 @@ function Pedidos() {
         <Container>
           <Navbar.Brand href="#home">
             <Button variant="primary" className="bttMenu" onClick={() => {
-              document.getElementById('mySidenav').style.width = "250px";
+              document.getElementById('mySidenav')!.style.width = "250px";
             }}><img className="bttMenuSide" src={Sidebar} alt="bttMenuSide"/></Button>
           </Navbar.Brand>
         </Container>

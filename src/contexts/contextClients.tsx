@@ -2,17 +2,41 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from 'prop-types'
 
+type TypeAddress = {
+    rua?:string,
+    numero?:string,
+    bairro?:string,
+    cep?:string,
+    cidade?:string,
+    estado?:string
+}
+
+type TypeUserData = {
+    nome?:string,
+    email?:string,
+    phone?:string,
+    register?:string,
+    address?:TypeAddress
+}
+
 type ClientContextType = {
     namesResult: Array<any>,
-    setNamesResult: React.Dispatch<React.SetStateAction<Array<Array<any>>>>,
+    setNamesResult: React.Dispatch<React.SetStateAction<Array<any>>>,
     listNames: Array<any>,
     setListNames: React.Dispatch<React.SetStateAction<Array<any>>>
+
+    userSelected: Array<any>,
+    setUserSelected: React.Dispatch<React.SetStateAction<Array<any>>>
+
+    dataUserSelected:TypeUserData
+    setDataUserSelected:React.Dispatch<React.SetStateAction<TypeUserData>>
 }
 
 export const ContextClient = createContext<ClientContextType | undefined>(undefined)
 
 function ContextClientsProvider({ children }) {
-
+    const [userSelected, setUserSelected] = useState<Array<any>>([]);
+    const [dataUserSelected, setDataUserSelected] = useState({})
     const [namesResult, setNamesResult] = useState<Array<any>>([]);
     const [listNames, setListNames] = useState<Array<any>>([]);
 
@@ -35,13 +59,42 @@ function ContextClientsProvider({ children }) {
         getNames()
     }, [])
 
+    useEffect(()=>{
+        
+        async function getUser(user:Array<any>){
+            try{
+                await axios({
+                    method:'get',
+                    url:`http://localhost:3333/clients/${user[0]}`,
+                    responseType:'json'
+                }).then(function(response){
+                    console.log(response.data)
+                    setDataUserSelected(response.data)
+                })
+            }catch(err:any){
+                return `ERR:${err}`
+            }
+        }
+        if(userSelected.length == 2){
+            console.log('user selected')
+            getUser(userSelected)
+        }
+
+    }, [userSelected])
+
     return (
         <ContextClient.Provider value={{
             namesResult,
             setNamesResult,
 
             listNames,
-            setListNames
+            setListNames,
+
+            userSelected,
+            setUserSelected,
+
+            dataUserSelected,
+            setDataUserSelected
         }}>
             {children}
         </ContextClient.Provider>

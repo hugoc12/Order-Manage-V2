@@ -2,8 +2,12 @@
     width: 600px;
     background-color: #10828C;
     border-radius: 5px;
-    margin: 5px auto;
     padding: 5px;
+    
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 5px auto;
 }
 
 .ulClients{

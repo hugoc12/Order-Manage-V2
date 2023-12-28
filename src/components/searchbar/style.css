@@ -22,3 +22,17 @@
     font-size: 24px;
     margin-left: 10px;
 }
+
+.iconSearch{
+    box-shadow: inset 16px 20px 11px -16px rgba(209,209,209,1);
+
+}
+
+.iconSearch:hover{
+    background-color: #10828C;
+    cursor: pointer;
+}
+
+.iconSearch:active{
+    background-color: #F97300;
+}
