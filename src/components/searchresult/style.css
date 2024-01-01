@@ -8,6 +8,8 @@
     left: 0;
     right: 0;
     margin: 5px auto;
+
+    z-index: 1;
 }
 
 .ulClients{

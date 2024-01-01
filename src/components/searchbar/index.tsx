@@ -1,7 +1,6 @@
 import './style.css'
 import { useContext } from 'react';
 import { ContextClient } from '../../contexts/contextClients';
-import { FaSearch } from 'react-icons/fa';
 import { HiOutlineDocumentSearch } from "react-icons/hi";
 
 function Searchbar() {
