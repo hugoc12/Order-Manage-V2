@@ -43,7 +43,7 @@ function Clients() {
     const idUser = context?.userSelected[0]
 
     if (!input.disabled) {
-      // if == false - ou seja estou fazendo uma alteração btt save
+      // if == false - fazendo uma alteração -> click btt save
 
       try {
         await axios.put(`http://localhost:3333/clients/${idUser}`, {
@@ -56,7 +56,7 @@ function Clients() {
       } catch (err) {
         alert(`ERRO:${err}`)
       }
-    } else { // se estiver desabilitado devo abilitar
+    } else { // se estiver desabilitado devo abilitar -> click edit
       input.disabled = false
       btt.textContent = 'SAVE'
       btt.setAttribute('class', 'btn btn-outline-success')
@@ -90,30 +90,44 @@ function Clients() {
             <Form.Label>Name</Form.Label>
             <InputGroup>
               <Form.Control type="text" placeholder="Enter name" id="name" disabled />
-              <Button variant="outline-warning" onClick={(e) => { editData('name', 'name', e.currentTarget) }}>EDIT</Button>
+              <Button variant="outline-warning" onClick={(e) => editData('name', 'name', e.currentTarget)}>EDIT</Button>
             </InputGroup>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Email" id="email" disabled />
+            <InputGroup>
+              <Form.Control type="email" placeholder="Email" id="email" disabled />
+              <Button variant="outline-warning" onClick={(e) => editData('email', 'email', e.currentTarget)}>EDIT</Button>
+            </InputGroup>
+
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Phone</Form.Label>
-            <Form.Control type="text" placeholder="Phone" id="phone" disabled />
+            <InputGroup>
+              <Form.Control type="text" placeholder="Phone" id="phone" disabled />
+              <Button variant="outline-warning" onClick={(e) => editData('phone', 'phone', e.currentTarget)}>EDIT</Button>
+            </InputGroup>
+            
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Register</Form.Label>
-            <Form.Control type="text" placeholder="CPF/CNPJ" id="register" disabled />
+            <InputGroup>
+              <Form.Control type="text" placeholder="Phone" id="register" disabled />
+              <Button variant="outline-warning" onClick={(e) => editData('register', 'register', e.currentTarget)}>EDIT</Button>
+            </InputGroup>
           </Form.Group>
 
           <div className="containerAddress">
             <Form.Group as={Row} className="mb-3">
               <Col sm={4}>
                 <Form.Label>Cep</Form.Label>
-                <Form.Control type="text" placeholder="Cep" id="cep" disabled />
+                <InputGroup>
+                  <Form.Control type="text" placeholder="Cep" id="cep" disabled />
+                  <Button variant="outline-warning" onClick={(e) => editData('cep', 'address.cep', e.currentTarget)}>EDIT</Button>
+                </InputGroup>
               </Col>
             </Form.Group>
 
@@ -121,21 +135,30 @@ function Clients() {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Rua</Form.Label>
-                  <Form.Control type="text" placeholder="Rua" id="rua" disabled />
+                  <InputGroup>
+                    <Form.Control type="text" placeholder="Rua" id="rua" disabled />
+                    <Button variant="outline-warning" onClick={(e)=> editData('rua', 'address.rua', e.currentTarget)}>EDIT</Button>
+                  </InputGroup>
                 </Form.Group>
               </Col>
 
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Número</Form.Label>
-                  <Form.Control type="text" placeholder="Número" id="numero" disabled />
+                  <InputGroup>
+                    <Form.Control type="text" placeholder="Número" id="numero" disabled />
+                    <Button variant="outline-warning" onClick={(e)=> editData('numero', 'address.numero', e.currentTarget)}>EDIT</Button>
+                  </InputGroup>
                 </Form.Group>
               </Col>
 
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Bairro</Form.Label>
-                  <Form.Control type="text" placeholder="Bairro" id="bairro" disabled />
+                  <InputGroup>
+                    <Form.Control type="text" placeholder="Bairro" id="bairro" disabled />
+                    <Button variant="outline-warning" onClick={(e)=> editData('bairro', 'address.bairro', e.currentTarget)}>EDIT</Button>
+                  </InputGroup>
                 </Form.Group>
               </Col>
             </Row>
@@ -144,14 +167,21 @@ function Clients() {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Cidade</Form.Label>
-                  <Form.Control type="text" placeholder="Rua" id="cidade" disabled />
+                  <InputGroup>
+                    <Form.Control type="text" placeholder="Cidade" id="cidade" disabled />
+                    <Button variant="outline-warning" onClick={(e)=> editData('cidade', 'address.cidade', e.currentTarget)}>EDIT</Button>
+                  </InputGroup>
+                  
                 </Form.Group>
               </Col>
 
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Estado</Form.Label>
-                  <Form.Control type="text" placeholder="Número" id="estado" disabled />
+                  <InputGroup>
+                    <Form.Control type="text" placeholder="Estado" id="estado" disabled />
+                    <Button variant="outline-warning" onClick={(e)=> editData('estado', 'address.estado', e.currentTarget)}>EDIT</Button>
+                  </InputGroup>
                 </Form.Group>
               </Col>
             </Row>
