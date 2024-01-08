@@ -53,6 +53,16 @@ function Clients() {
         input.disabled = true // desativando input
         btt.textContent = 'EDIT'
         btt.setAttribute('class', 'btn btn-outline-warning')
+
+        if(property == 'name'){
+          await axios.get('http://localhost:3333/clientsnames', {
+            responseType:'json'
+          }).then(function(response){
+            const data = Object.entries(response.data)
+            context?.setListNames(data)
+          })
+        }
+
       } catch (err) {
         alert(`ERRO:${err}`)
       }
