@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { Button, Container, Navbar, Form, Row, Col, InputGroup } from "react-bootstrap";
+import { useContext, useEffect, useState } from "react";
+import { Button, Container, Navbar, Form, Row, Col, InputGroup, Table } from "react-bootstrap";
 import { AiOutlineUser, AiOutlineShopping, AiOutlineCloseCircle  } from "react-icons/ai";
 import SideMenu from "../../components/side-menu/side-menu";
 import Searchbar from "../../components/searchbar";
@@ -11,6 +11,8 @@ import axios from "axios";
 
 function Clients() {
   const context = useContext(ContextClient);
+  const [colDadosPessoais, setColDadosPessoais] = useState(false);
+  const [colPedidos, setColPedidos] = useState(true);
 
   useEffect(() => {
     console.log(context?.dataUserSelected)
@@ -104,6 +106,9 @@ function Clients() {
               <a href="#" className="itemMenu"><AiOutlineCloseCircle size={40} className="iconItem"/> Remover</a>
             </div>
           </Col>
+
+          {/*Col Dados Pessoais*/}
+          {colDadosPessoais ?           
           <Col sm={9} className="col">
             <Form id="formDataUser" className="formDataUser">
                 <fieldset>
@@ -209,7 +214,39 @@ function Clients() {
                   </div>
                 </fieldset>
             </Form>
-          </Col>
+          </Col>:<></>
+          }
+
+          {/*Col Pedidos*/}
+          {colPedidos ? 
+          <Col sm={9} className="col">
+            <Table>
+              <thead>
+                <tr>  
+                  <th>Nº</th>
+                  <th>Endereco</th>
+                  <th>STATUS</th>
+                  <th>EDIT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Rua Ludgero José dos Santos - 85 - Jardim Sandra - São Paulo SP</td>
+                  <td>ENVIADO</td>
+                  <td>BTT</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Rua Guaraiuva - 290 - Broklim - São Paulo SP</td>
+                  <td>AGUARDANDO</td>
+                  <td>BTT</td>
+                </tr>
+              </tbody>
+            </Table>
+          </Col>:
+          <></>
+          }
         </Row>
       </Container>
 
