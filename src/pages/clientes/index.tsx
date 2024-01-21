@@ -11,11 +11,38 @@ import axios from "axios";
 
 function Clients() {
   const context = useContext(ContextClient);
-  const [colDadosPessoais, setColDadosPessoais] = useState(false);
-  const [colPedidos, setColPedidos] = useState(true);
+  const [colDadosPessoais, setColDadosPessoais] = useState(true);
+  const [colPedidos, setColPedidos] = useState(false);
+
+  useEffect(()=>{
+    if(colDadosPessoais == true && context?.userSelected.length == 2){ //USUÁRIO ENCONTRADO
+
+      const inputName = (document.getElementById('name') as HTMLInputElement)
+      const inputEmail = (document.getElementById('email') as HTMLInputElement)
+      const inputPhone = (document.getElementById('phone') as HTMLInputElement)
+      const inputRegister = (document.getElementById('register') as HTMLInputElement)
+      const inputCep = (document.getElementById('cep') as HTMLInputElement)
+      const inputRua = (document.getElementById('rua') as HTMLInputElement)
+      const inputNumero = (document.getElementById('numero') as HTMLInputElement)
+      const inputBairro = (document.getElementById('bairro') as HTMLInputElement)
+      const inputCidade = (document.getElementById('cidade') as HTMLInputElement)
+      const inputEstado = (document.getElementById('estado') as HTMLInputElement)
+
+      inputName.value = `${context?.dataUserSelected.nome}`
+      inputEmail.value = `${context?.dataUserSelected.email}`
+      inputPhone.value = `${context?.dataUserSelected.phone}`
+      inputRegister.value = `${context?.dataUserSelected.register}`
+      inputCep.value = `${context?.dataUserSelected.address?.cep}`
+      inputRua.value = `${context?.dataUserSelected.address?.rua}`
+      inputNumero.value = `${context?.dataUserSelected.address?.numero}`
+      inputBairro.value = `${context?.dataUserSelected.address?.bairro}`
+      inputCidade.value = `${context?.dataUserSelected.address?.cidade}`
+      inputEstado.value = `${context?.dataUserSelected.address?.estado}`
+    }
+    
+  }, [colDadosPessoais])
 
   useEffect(() => {
-    console.log(context?.dataUserSelected)
     if (context?.dataUserSelected.hasOwnProperty('nome')) {
       const inputName = (document.getElementById('name') as HTMLInputElement)
       const inputEmail = (document.getElementById('email') as HTMLInputElement)
@@ -76,6 +103,26 @@ function Clients() {
     }
   }
 
+  function screenCol(btt:React.MouseEvent<HTMLAnchorElement, MouseEvent>){
+    //alert(`DADOS PESSOAIS - ${btt.currentTarget.textContent}`)
+    const bttsMenu = [...document.querySelectorAll('.itemMenu')];
+    bttsMenu.forEach((el)=>{
+      el.setAttribute('class', 'itemMenu')
+    })
+    btt.currentTarget.setAttribute('class', 'itemMenu itemMenuActive')
+
+    if(btt.currentTarget.textContent == 'Dados Pessoais'){
+      console.log(btt.currentTarget.textContent)
+      setColPedidos(false)
+      setColDadosPessoais(true)
+
+    }else if(btt.currentTarget.textContent == 'Pedidos'){
+      console.log(btt.currentTarget.textContent)
+      setColPedidos(true)
+      setColDadosPessoais(false)
+    }
+  }
+
   return (
     <div>
       <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
@@ -101,8 +148,8 @@ function Clients() {
         <Row>
           <Col sm={3} className="col col_menu">
             <div className="menu">
-              <a href="#" className="itemMenu"><AiOutlineUser size={40} className="iconItem"/>Dados Pessoais</a>
-              <a href="#" className="itemMenu"><AiOutlineShopping size={40} className="iconItem"/> Pedidos</a>
+              <a href="#" className="itemMenu itemMenuActive" onClick={(e)=>screenCol(e)}><AiOutlineUser size={40} className="iconItem"/>Dados Pessoais</a>
+              <a href="#" className="itemMenu" onClick={(e)=>screenCol(e)}><AiOutlineShopping size={40} className="iconItem"/>Pedidos</a>
               <a href="#" className="itemMenu"><AiOutlineCloseCircle size={40} className="iconItem"/> Remover</a>
             </div>
           </Col>

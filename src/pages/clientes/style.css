@@ -28,11 +28,17 @@
     text-decoration: none;
     color: #000;
     font-weight: bold;
+    transition: 0.2s;
 }
 
 .itemMenu:hover{
-    background-color: #0E3047;
+    background-color: #1d4b69;
     color: #F8F5E4;
+}
+
+.itemMenuActive{
+    background-color: #0E3047;
+    color: #F8F5E4;  
 }
 
 .iconItem{
