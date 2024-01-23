@@ -11,11 +11,11 @@ import axios from "axios";
 
 function Clients() {
   const context = useContext(ContextClient);
-  const [colDadosPessoais, setColDadosPessoais] = useState(true);
-  const [colPedidos, setColPedidos] = useState(false);
+  //const [colDadosPessoais, setColDadosPessoais] = useState(true);
+  //const [colPedidos, setColPedidos] = useState(false);
 
   useEffect(()=>{
-    if(colDadosPessoais == true && context?.userSelected.length == 2){ //USUÁRIO ENCONTRADO
+    if(context?.colDadosPessoais == true && context?.userSelected.length == 2){ //USUÁRIO ENCONTRADO
 
       const inputName = (document.getElementById('name') as HTMLInputElement)
       const inputEmail = (document.getElementById('email') as HTMLInputElement)
@@ -40,7 +40,7 @@ function Clients() {
       inputEstado.value = `${context?.dataUserSelected.address?.estado}`
     }
     
-  }, [colDadosPessoais])
+  }, [context?.colDadosPessoais])
 
   useEffect(() => {
     if (context?.dataUserSelected.hasOwnProperty('nome')) {
@@ -113,13 +113,13 @@ function Clients() {
 
     if(btt.currentTarget.textContent == 'Dados Pessoais'){
       console.log(btt.currentTarget.textContent)
-      setColPedidos(false)
-      setColDadosPessoais(true)
+      context?.setColPedidos(false)
+      context?.setColDadosPessoais(true)
 
     }else if(btt.currentTarget.textContent == 'Pedidos'){
       console.log(btt.currentTarget.textContent)
-      setColPedidos(true)
-      setColDadosPessoais(false)
+      context?.setColPedidos(true)
+      context?.setColDadosPessoais(false)
     }
   }
 
@@ -155,7 +155,7 @@ function Clients() {
           </Col>
 
           {/*Col Dados Pessoais*/}
-          {colDadosPessoais ?           
+          {context?.colDadosPessoais ?           
           <Col sm={9} className="col">
             <Form id="formDataUser" className="formDataUser">
                 <fieldset>
@@ -265,7 +265,7 @@ function Clients() {
           }
 
           {/*Col Pedidos*/}
-          {colPedidos ? 
+          {context?.colPedidos ? 
           <Col sm={9} className="col">
             <Table>
               <thead>

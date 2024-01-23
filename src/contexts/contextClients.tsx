@@ -30,6 +30,12 @@ type ClientContextType = {
 
     dataUserSelected:TypeUserData
     setDataUserSelected:React.Dispatch<React.SetStateAction<TypeUserData>>
+
+    colPedidos:Boolean
+    setColPedidos:React.Dispatch<React.SetStateAction<Boolean>>
+
+    colDadosPessoais:Boolean
+    setColDadosPessoais:React.Dispatch<React.SetStateAction<Boolean>>
 }
 
 export const ContextClient = createContext<ClientContextType | undefined>(undefined)
@@ -39,6 +45,8 @@ function ContextClientsProvider({ children }) {
     const [dataUserSelected, setDataUserSelected] = useState({})
     const [namesResult, setNamesResult] = useState<Array<any>>([]);
     const [listNames, setListNames] = useState<Array<any>>([]);
+    const [colPedidos, setColPedidos] = useState<Boolean>(false);
+    const [colDadosPessoais, setColDadosPessoais] = useState<Boolean>(true);
 
     useEffect(() => {
         async function getNames() {
@@ -94,7 +102,13 @@ function ContextClientsProvider({ children }) {
             setUserSelected,
 
             dataUserSelected,
-            setDataUserSelected
+            setDataUserSelected,
+
+            colPedidos,
+            setColPedidos,
+
+            colDadosPessoais,
+            setColDadosPessoais
         }}>
             {children}
         </ContextClient.Provider>
