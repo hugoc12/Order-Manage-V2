@@ -6,3 +6,46 @@
 .containerAddress{
     margin-top: 20px;
 }
+
+
+
+.menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.col_menu{
+    background-color: #F8F5E4;
+}
+
+.itemMenu{
+    align-self: stretch;
+    text-align: start;
+    padding: 20px 0px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.itemMenu:hover{
+    background-color: #1d4b69;
+    color: #F8F5E4;
+}
+
+.itemMenuActive{
+    background-color: #0E3047;
+    color: #F8F5E4;  
+}
+
+.iconItem{
+    margin-right: 15px;
+    margin-left: 30px;
+}
+
+.col{
+    padding: 0px !important;
+}
