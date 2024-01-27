@@ -20,16 +20,20 @@ type TypeUserData = {
 }
 
 type ClientContextType = {
-    namesResult: Array<any>,
-    setNamesResult: React.Dispatch<React.SetStateAction<Array<any>>>,
-    listNames: Array<any>,
+    namesResult: Array<any>
+    setNamesResult: React.Dispatch<React.SetStateAction<Array<any>>>
+
+    listNames: Array<any>
     setListNames: React.Dispatch<React.SetStateAction<Array<any>>>
 
-    userSelected: Array<any>,
+    userSelected: Array<any>
     setUserSelected: React.Dispatch<React.SetStateAction<Array<any>>>
 
     dataUserSelected:TypeUserData
     setDataUserSelected:React.Dispatch<React.SetStateAction<TypeUserData>>
+
+    ordersClient: Array<any>
+    setOrdersClient:React.Dispatch<React.SetStateAction<Array<any>>>
 
     colPedidos:Boolean
     setColPedidos:React.Dispatch<React.SetStateAction<Boolean>>
@@ -43,6 +47,7 @@ export const ContextClient = createContext<ClientContextType | undefined>(undefi
 function ContextClientsProvider({ children }) {
     const [userSelected, setUserSelected] = useState<Array<any>>([]);
     const [dataUserSelected, setDataUserSelected] = useState({})
+    const [ordersClient, setOrdersClient] = useState<Array<any>>([])
     const [namesResult, setNamesResult] = useState<Array<any>>([]);
     const [listNames, setListNames] = useState<Array<any>>([]);
     const [colPedidos, setColPedidos] = useState<Boolean>(false);
@@ -71,13 +76,23 @@ function ContextClientsProvider({ children }) {
         
         async function getUser(user:Array<any>){
             try{
+                //Busca dos dados do usuário
                 await axios({
                     method:'get',
                     url:`http://localhost:3333/clients/${user[0]}`,
                     responseType:'json'
                 }).then(function(response){
-                    console.log(response.data)
                     setDataUserSelected(response.data)
+                })
+
+                //Busca de pedidos
+                await axios({
+                    method:'get',
+                    url:`http://localhost:3333/orders/${user[0]}`,
+                    responseType:'json'
+                }).then(function(response){
+                    setOrdersClient(Object.entries(response.data))
+                    //console.log(Object.entries(response.data))
                 })
             }catch(err:any){
                 return `ERR:${err}`
@@ -108,7 +123,10 @@ function ContextClientsProvider({ children }) {
             setColPedidos,
 
             colDadosPessoais,
-            setColDadosPessoais
+            setColDadosPessoais,
+
+            ordersClient,
+            setOrdersClient
         }}>
             {children}
         </ContextClient.Provider>

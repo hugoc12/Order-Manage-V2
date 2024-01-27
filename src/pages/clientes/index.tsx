@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Button, Container, Navbar, Form, Row, Col, InputGroup, Table } from "react-bootstrap";
 import { AiOutlineUser, AiOutlineShopping, AiOutlineCloseCircle  } from "react-icons/ai";
 import SideMenu from "../../components/side-menu/side-menu";
@@ -11,8 +11,6 @@ import axios from "axios";
 
 function Clients() {
   const context = useContext(ContextClient);
-  //const [colDadosPessoais, setColDadosPessoais] = useState(true);
-  //const [colPedidos, setColPedidos] = useState(false);
 
   useEffect(()=>{
     if(context?.colDadosPessoais == true && context?.userSelected.length == 2){ //USUÁRIO ENCONTRADO
@@ -65,6 +63,7 @@ function Clients() {
       inputBairro.value = `${context.dataUserSelected.address?.bairro}`
       inputCidade.value = `${context.dataUserSelected.address?.cidade}`
       inputEstado.value = `${context.dataUserSelected.address?.estado}`
+      
     }
   }, [context?.dataUserSelected])
 
@@ -146,6 +145,7 @@ function Clients() {
 
       <Container className="container_grid" fluid>
         <Row>
+          {/*Side Menu*/}
           <Col sm={3} className="col col_menu">
             <div className="menu">
               <a href="#" className="itemMenu itemMenuActive" onClick={(e)=>screenCol(e)}><AiOutlineUser size={40} className="iconItem"/>Dados Pessoais</a>
@@ -277,18 +277,16 @@ function Clients() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Rua Ludgero José dos Santos - 85 - Jardim Sandra - São Paulo SP</td>
-                  <td>ENVIADO</td>
-                  <td>BTT</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Rua Guaraiuva - 290 - Broklim - São Paulo SP</td>
-                  <td>AGUARDANDO</td>
-                  <td>BTT</td>
-                </tr>
+                {context.ordersClient.map((order)=>{
+                  return(
+                    <tr>
+                      <td>{order[0]}</td>
+                      <td>{`${order[1].client.address.rua} - ${order[1].client.address.numero} - ${order[1].client.address.bairro} - ${order[1].client.address.cidade} - ${order[1].client.address.estado}`}</td>
+                      <td>{order[1].status}</td>
+                      <td>BTT</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </Table>
           </Col>:
