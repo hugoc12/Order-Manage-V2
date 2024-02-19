@@ -8,6 +8,7 @@ import SideMenu from "../../components/side-menu/side-menu";
 import Backspace from "../../assets/backspace.png";
 import Edit from "../../assets/edit.png";
 import Sidebar from '../../assets/sidebar.png';
+import Search from '../../assets/search.png';
 
 function Pedidos() {
   type dataOrder = {
@@ -53,20 +54,6 @@ function Pedidos() {
     getOrders();
   }, [loadOrders]);
 
-  async function removeOrder(idClient, idOrder) {
-    try {
-      await axios({
-        method: "delete",
-        url: `http://localhost:3333/orders/delete/${idClient}/${idOrder}`
-      }).then(function (response) {
-        if (response.status == 200) {
-          setLoadOrders(true)
-        }
-      })
-    } catch (err) {
-      console.log('Erro na requisição')
-    }
-  }
 
   return (
     <div>
@@ -116,12 +103,8 @@ function Pedidos() {
                   <td>{orderData.rastreio}</td>
                   <td>{orderData.status}</td>
                   <td>
-                    <Button variant="danger" onClick={() => removeOrder(orderData.idClient, orderNumber)}>
-                      <img className="btt" src={Backspace} alt="deleteOrder" />
-                      
-                    </Button>
-                    <Button variant="primary">
-                      <img className="btt" src={Edit} alt="deleteOrder" />
+                    <Button variant="info">
+                      <img className="btt" src={Search} alt="searchOrder" />
                     </Button>
                   </td>
                 </tr>

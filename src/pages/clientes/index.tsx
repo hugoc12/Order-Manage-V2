@@ -1,6 +1,9 @@
-import { useContext, useEffect } from "react";
-import { Button, Container, Navbar, Form, Row, Col, InputGroup, Table } from "react-bootstrap";
-import { AiOutlineUser, AiOutlineShopping, AiOutlineCloseCircle  } from "react-icons/ai";
+import { useContext, useEffect, useState } from "react";
+import { Button, Container, Navbar, Form, Row, Col, InputGroup, Table, Spinner } from "react-bootstrap";
+import { AiOutlineUser, AiOutlineShopping, AiOutlineCloseCircle } from "react-icons/ai";
+import Backspace from "../../assets/backspace.png";
+import search from '../../assets/search.png';
+import Edit from "../../assets/edit.png";
 import SideMenu from "../../components/side-menu/side-menu";
 import Searchbar from "../../components/searchbar";
 import { ContextClient } from "../../contexts/contextClients";
@@ -11,9 +14,10 @@ import axios from "axios";
 
 function Clients() {
   const context = useContext(ContextClient);
+  const [loadData, setLoadData] = useState(false);
 
-  useEffect(()=>{
-    if(context?.colDadosPessoais == true && context?.userSelected.length == 2){ //USUÁRIO ENCONTRADO
+  useEffect(() => {
+    if (context?.colDadosPessoais == true && context?.userSelected.length == 2) { //USUÁRIO ENCONTRADO
 
       const inputName = (document.getElementById('name') as HTMLInputElement)
       const inputEmail = (document.getElementById('email') as HTMLInputElement)
@@ -37,7 +41,7 @@ function Clients() {
       inputCidade.value = `${context?.dataUserSelected.address?.cidade}`
       inputEstado.value = `${context?.dataUserSelected.address?.estado}`
     }
-    
+
   }, [context?.colDadosPessoais])
 
   useEffect(() => {
@@ -63,7 +67,7 @@ function Clients() {
       inputBairro.value = `${context.dataUserSelected.address?.bairro}`
       inputCidade.value = `${context.dataUserSelected.address?.cidade}`
       inputEstado.value = `${context.dataUserSelected.address?.estado}`
-      
+
     }
   }, [context?.dataUserSelected])
 
@@ -83,10 +87,10 @@ function Clients() {
         btt.textContent = 'EDIT'
         btt.setAttribute('class', 'btn btn-outline-warning')
 
-        if(property == 'name'){
+        if (property == 'name') {
           await axios.get('http://localhost:3333/clientsnames', {
-            responseType:'json'
-          }).then(function(response){
+            responseType: 'json'
+          }).then(function (response) {
             const data = Object.entries(response.data)
             context?.setListNames(data)
           })
@@ -102,30 +106,53 @@ function Clients() {
     }
   }
 
-  function screenCol(btt:React.MouseEvent<HTMLAnchorElement, MouseEvent>){
+  function screenCol(btt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     //alert(`DADOS PESSOAIS - ${btt.currentTarget.textContent}`)
     const bttsMenu = [...document.querySelectorAll('.itemMenu')];
-    bttsMenu.forEach((el)=>{
+    bttsMenu.forEach((el) => {
       el.setAttribute('class', 'itemMenu')
     })
     btt.currentTarget.setAttribute('class', 'itemMenu itemMenuActive')
 
-    if(btt.currentTarget.textContent == 'Dados Pessoais'){
+    if (btt.currentTarget.textContent == 'Dados Pessoais') {
       console.log(btt.currentTarget.textContent)
       context?.setColPedidos(false)
       context?.setColDadosPessoais(true)
 
-    }else if(btt.currentTarget.textContent == 'Pedidos'){
+    } else if (btt.currentTarget.textContent == 'Pedidos') {
       console.log(btt.currentTarget.textContent)
       context?.setColPedidos(true)
       context?.setColDadosPessoais(false)
     }
   }
 
+  async function removeOrder(idClient, nameClient, idOrder) {
+    setLoadData(true);
+
+    try {
+      await axios({
+        method: "delete",
+        url: `http://localhost:3333/orders/delete/${idClient}/${idOrder}`
+      })
+
+      //Busca de pedidos
+      await axios({
+        method: 'get',
+        url: `http://localhost:3333/orders/${idClient}`,
+        responseType: 'json'
+      }).then(function (response) {
+        context?.setOrdersClient(Object.entries(response.data))
+        setLoadData(false)
+      })
+    } catch (err) {
+      console.log('Erro na requisição')
+    }
+  }
+
   return (
     <div>
       <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
-        <Container>
+        <Container fluid>
           <Navbar.Brand href="#home">
             <Button
               variant="primary"
@@ -137,6 +164,8 @@ function Clients() {
               <img className="bttMenuSide" src={Sidebar} alt="bttMenuSide" />
             </Button>
           </Navbar.Brand>
+
+          <Button variant="success" className="bttAddOrder">INCLUIR PEDIDO</Button>
         </Container>
       </Navbar>
       <SideMenu />
@@ -148,16 +177,16 @@ function Clients() {
           {/*Side Menu*/}
           <Col sm={3} className="col col_menu">
             <div className="menu">
-              <a href="#" className="itemMenu itemMenuActive" onClick={(e)=>screenCol(e)}><AiOutlineUser size={40} className="iconItem"/>Dados Pessoais</a>
-              <a href="#" className="itemMenu" onClick={(e)=>screenCol(e)}><AiOutlineShopping size={40} className="iconItem"/>Pedidos</a>
-              <a href="#" className="itemMenu"><AiOutlineCloseCircle size={40} className="iconItem"/> Remover</a>
+              <a href="#" className="itemMenu itemMenuActive" onClick={(e) => screenCol(e)}><AiOutlineUser size={40} className="iconItem" />Dados Pessoais</a>
+              <a href="#" className="itemMenu" onClick={(e) => screenCol(e)}><AiOutlineShopping size={40} className="iconItem" />Pedidos</a>
+              <a href="#" className="itemMenu"><AiOutlineCloseCircle size={40} className="iconItem" /> Remover</a>
             </div>
           </Col>
 
           {/*Col Dados Pessoais*/}
-          {context?.colDadosPessoais ?           
-          <Col sm={9} className="col">
-            <Form id="formDataUser" className="formDataUser">
+          {context?.colDadosPessoais ?
+            <Col sm={9} className="col">
+              <Form id="formDataUser" className="formDataUser">
                 <fieldset>
                   <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
@@ -182,7 +211,7 @@ function Clients() {
                       <Form.Control type="text" placeholder="Phone" id="phone" disabled />
                       <Button variant="outline-warning" onClick={(e) => editData('phone', 'phone', e.currentTarget)}>EDIT</Button>
                     </InputGroup>
-                    
+
                   </Form.Group>
 
                   <Form.Group className="mb-3">
@@ -210,7 +239,7 @@ function Clients() {
                           <Form.Label>Rua</Form.Label>
                           <InputGroup>
                             <Form.Control type="text" placeholder="Rua" id="rua" disabled />
-                            <Button variant="outline-warning" onClick={(e)=> editData('rua', 'address.rua', e.currentTarget)}>EDIT</Button>
+                            <Button variant="outline-warning" onClick={(e) => editData('rua', 'address.rua', e.currentTarget)}>EDIT</Button>
                           </InputGroup>
                         </Form.Group>
                       </Col>
@@ -220,7 +249,7 @@ function Clients() {
                           <Form.Label>Número</Form.Label>
                           <InputGroup>
                             <Form.Control type="text" placeholder="Número" id="numero" disabled />
-                            <Button variant="outline-warning" onClick={(e)=> editData('numero', 'address.numero', e.currentTarget)}>EDIT</Button>
+                            <Button variant="outline-warning" onClick={(e) => editData('numero', 'address.numero', e.currentTarget)}>EDIT</Button>
                           </InputGroup>
                         </Form.Group>
                       </Col>
@@ -230,7 +259,7 @@ function Clients() {
                           <Form.Label>Bairro</Form.Label>
                           <InputGroup>
                             <Form.Control type="text" placeholder="Bairro" id="bairro" disabled />
-                            <Button variant="outline-warning" onClick={(e)=> editData('bairro', 'address.bairro', e.currentTarget)}>EDIT</Button>
+                            <Button variant="outline-warning" onClick={(e) => editData('bairro', 'address.bairro', e.currentTarget)}>EDIT</Button>
                           </InputGroup>
                         </Form.Group>
                       </Col>
@@ -242,9 +271,9 @@ function Clients() {
                           <Form.Label>Cidade</Form.Label>
                           <InputGroup>
                             <Form.Control type="text" placeholder="Cidade" id="cidade" disabled />
-                            <Button variant="outline-warning" onClick={(e)=> editData('cidade', 'address.cidade', e.currentTarget)}>EDIT</Button>
+                            <Button variant="outline-warning" onClick={(e) => editData('cidade', 'address.cidade', e.currentTarget)}>EDIT</Button>
                           </InputGroup>
-                          
+
                         </Form.Group>
                       </Col>
 
@@ -253,44 +282,56 @@ function Clients() {
                           <Form.Label>Estado</Form.Label>
                           <InputGroup>
                             <Form.Control type="text" placeholder="Estado" id="estado" disabled />
-                            <Button variant="outline-warning" onClick={(e)=> editData('estado', 'address.estado', e.currentTarget)}>EDIT</Button>
+                            <Button variant="outline-warning" onClick={(e) => editData('estado', 'address.estado', e.currentTarget)}>EDIT</Button>
                           </InputGroup>
                         </Form.Group>
                       </Col>
                     </Row>
                   </div>
                 </fieldset>
-            </Form>
-          </Col>:<></>
+              </Form>
+            </Col> : <></>
           }
 
           {/*Col Pedidos*/}
-          {context?.colPedidos ? 
-          <Col sm={9} className="col">
-            <Table>
-              <thead>
-                <tr>  
-                  <th>Nº</th>
-                  <th>Endereco</th>
-                  <th>STATUS</th>
-                  <th>EDIT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {context.ordersClient.map((order)=>{
-                  return(
+          {context?.colPedidos ?
+            <Col sm={9} className="col">
+              {loadData ? <Spinner animation="border" variant="primary" /> :
+                <Table>
+                  <thead>
                     <tr>
-                      <td>{order[0]}</td>
-                      <td>{`${order[1].client.address.rua} - ${order[1].client.address.numero} - ${order[1].client.address.bairro} - ${order[1].client.address.cidade} - ${order[1].client.address.estado}`}</td>
-                      <td>{order[1].status}</td>
-                      <td>BTT</td>
+                      <th>Nº</th>
+                      <th>Endereco</th>
+                      <th>STATUS</th>
+                      <th></th>
                     </tr>
-                  )
-                })}
-              </tbody>
-            </Table>
-          </Col>:
-          <></>
+                  </thead>
+                  <tbody>
+                    {context.ordersClient.map((order) => {
+                      return (
+                        <tr>
+                          <td>{order[0]}</td>
+                          <td>{`${order[1].client.address.rua} - ${order[1].client.address.numero} - ${order[1].client.address.bairro} - ${order[1].client.address.cidade} - ${order[1].client.address.estado}`}</td>
+                          <td>{order[1].status}</td>
+                          <td>
+                            <Button variant="info">
+                              <img className="btt" src={search} alt="infoOrder" />
+                            </Button>
+                            <Button variant="primary">
+                              <img className="btt" src={Edit} alt="editOrder" />
+                            </Button>
+                            <Button variant="danger" onClick={() => removeOrder(order[1].idClient, order[1].client.name, order[0])}>
+                              <img className="btt" src={Backspace} alt="deleteOrder" />
+                            </Button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              }
+            </Col> :
+            <></>
           }
         </Row>
       </Container>
